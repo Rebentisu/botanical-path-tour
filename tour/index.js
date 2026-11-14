@@ -3,10 +3,6 @@
  * Copyright 2016 Google Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0
- * (the "License");
- * you may not use this file except in compliance
- * with the License.
- *
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 'use strict';
@@ -18,22 +14,16 @@
   var screenfull = window.screenfull;
   var data = window.APP_DATA;
 
-  // Grab elements from DOM.
+  // DOM elements
   var panoElement = document.querySelector('#pano');
-  var sceneNameElement =
-    document.querySelector('#titleBar .sceneName');
-  var sceneListElement =
-    document.querySelector('#sceneList');
-  var sceneElements =
-    document.querySelectorAll('#sceneList .scene');
-  var sceneListToggleElement =
-    document.querySelector('#sceneListToggle');
-  var autorotateToggleElement =
-    document.querySelector('#autorotateToggle');
-  var fullscreenToggleElement =
-    document.querySelector('#fullscreenToggle');
+  var sceneNameElement = document.querySelector('#titleBar .sceneName');
+  var sceneListElement = document.querySelector('#sceneList');
+  var sceneElements = document.querySelectorAll('#sceneList .scene');
+  var sceneListToggleElement = document.querySelector('#sceneListToggle');
+  var autorotateToggleElement = document.querySelector('#autorotateToggle');
+  var fullscreenToggleElement = document.querySelector('#fullscreenToggle');
 
-  // Detect desktop or mobile mode.
+  // Desktop / mobile mode
   if (window.matchMedia) {
     var mql = window.matchMedia(
       "(max-width: 500px), (max-height: 500px)"
@@ -56,12 +46,11 @@
     } else {
       mql.addListener(setMode);
     }
-
   } else {
     document.body.classList.add('desktop');
   }
 
-  // Detect touch devices.
+  // Touch detection
   document.body.classList.add('no-touch');
 
   window.addEventListener('touchstart', function() {
@@ -69,52 +58,52 @@
     document.body.classList.add('touch');
   });
 
-  // Tooltip fallback for older browsers.
   if (bowser.msie && parseFloat(bowser.version) < 11) {
     document.body.classList.add('tooltip-fallback');
   }
 
-  // Viewer options.
+  // =====================================================
+  // INITIALIZE MARZIPANO
+  // =====================================================
+
   var viewerOpts = {
     controls: {
       mouseViewMode: data.settings.mouseViewMode
     }
   };
 
-  // Initialize Marzipano.
   var viewer = new Marzipano.Viewer(
     panoElement,
     viewerOpts
   );
 
   // =====================================================
-  // CREATE ALL PANORAMA SCENES
+  // CREATE PANORAMAS
   // =====================================================
 
   var scenes = data.scenes.map(function(sceneData) {
 
     var urlPrefix = "tiles";
 
-    var source =
-      Marzipano.ImageUrlSource.fromString(
-        urlPrefix + "/" + sceneData.id +
-        "/{z}/{f}/{y}/{x}.jpg",
-        {
-          cubeMapPreviewUrl:
-            urlPrefix + "/" + sceneData.id + "/preview.jpg"
-        }
-      );
+    var source = Marzipano.ImageUrlSource.fromString(
+      urlPrefix + "/" + sceneData.id +
+      "/{z}/{f}/{y}/{x}.jpg",
+      {
+        cubeMapPreviewUrl:
+          urlPrefix + "/" + sceneData.id + "/preview.jpg"
+      }
+    );
 
-    var geometry =
-      new Marzipano.CubeGeometry(sceneData.levels);
+    var geometry = new Marzipano.CubeGeometry(
+      sceneData.levels
+    );
 
-    // Original zoom limits.
-    var limiter =
-      Marzipano.RectilinearView.limit.traditional(
-        sceneData.faceSize,
-        100 * Math.PI / 180,
-        120 * Math.PI / 180
-      );
+    // Preserve original zoom limits
+    var limiter = Marzipano.RectilinearView.limit.traditional(
+      sceneData.faceSize,
+      100 * Math.PI / 180,
+      120 * Math.PI / 180
+    );
 
     var view = new Marzipano.RectilinearView(
       sceneData.initialViewParameters,
@@ -128,9 +117,8 @@
       pinFirstLevel: true
     });
 
-    // Create navigation hotspots.
+    // Navigation hotspots
     sceneData.linkHotspots.forEach(function(hotspot) {
-
       var element = createLinkHotspotElement(hotspot);
 
       scene.hotspotContainer().createHotspot(
@@ -140,12 +128,10 @@
           pitch: hotspot.pitch
         }
       );
-
     });
 
-    // Create information hotspots.
+    // Information hotspots
     sceneData.infoHotspots.forEach(function(hotspot) {
-
       var element = createInfoHotspotElement(hotspot);
 
       scene.hotspotContainer().createHotspot(
@@ -155,7 +141,6 @@
           pitch: hotspot.pitch
         }
       );
-
     });
 
     return {
@@ -163,7 +148,6 @@
       scene: scene,
       view: view
     };
-
   });
 
   // =====================================================
@@ -189,8 +173,7 @@
   // FULLSCREEN
   // =====================================================
 
-  if (screenfull.enabled &&
-      data.settings.fullscreenButton) {
+  if (screenfull.enabled && data.settings.fullscreenButton) {
 
     document.body.classList.add('fullscreen-enabled');
 
@@ -202,13 +185,11 @@
     );
 
     screenfull.on('change', function() {
-
       if (screenfull.isFullscreen) {
         fullscreenToggleElement.classList.add('enabled');
       } else {
         fullscreenToggleElement.classList.remove('enabled');
       }
-
     });
 
   } else {
@@ -242,33 +223,19 @@
       if (document.body.classList.contains('mobile')) {
         hideSceneList();
       }
-
     });
-
   });
 
   // =====================================================
   // MANUAL VIEW AND ZOOM CONTROLS
-  // ORIGINAL SETTINGS - UNCHANGED
   // =====================================================
 
-  var viewUpElement =
-    document.querySelector('#viewUp');
-
-  var viewDownElement =
-    document.querySelector('#viewDown');
-
-  var viewLeftElement =
-    document.querySelector('#viewLeft');
-
-  var viewRightElement =
-    document.querySelector('#viewRight');
-
-  var viewInElement =
-    document.querySelector('#viewIn');
-
-  var viewOutElement =
-    document.querySelector('#viewOut');
+  var viewUpElement = document.querySelector('#viewUp');
+  var viewDownElement = document.querySelector('#viewDown');
+  var viewLeftElement = document.querySelector('#viewLeft');
+  var viewRightElement = document.querySelector('#viewRight');
+  var viewInElement = document.querySelector('#viewIn');
+  var viewOutElement = document.querySelector('#viewOut');
 
   var velocity = 0.7;
   var friction = 3;
@@ -330,17 +297,17 @@
   }
 
   // =====================================================
-  // GOOGLE STREET VIEW TRANSITION
-  // + DIRECTION-AWARE ARRIVAL
+  // SMOOTH CROSSFADE TRANSITION
+  //
+  // NO AUTOMATIC ZOOM
+  // NO CAMERA TURN TOWARD NAVIGATION ARROW
+  // DIRECTION-AWARE ARRIVAL PRESERVED
   // =====================================================
 
-  // Prevent simultaneous transitions.
   var isTransitioning = false;
 
-  // Animation settings.
-  var approachDuration = 250;
+  // Duration of crossfade in milliseconds
   var fadeDuration = 400;
-  var approachScale = 1.00;
 
   // =====================================================
   // CALCULATE ARRIVAL DIRECTION
@@ -355,68 +322,54 @@
     var initial =
       destinationScene.data.initialViewParameters;
 
-    // Initial load and scene-list navigation.
+    // Initial load or scene-list navigation
     if (!previousScene || !hotspot) {
       return initial;
     }
 
-    // Identify the panorama we came from.
+    // Identify previous scene
     var previousId = null;
 
     for (var i = 0; i < scenes.length; i++) {
-
       if (scenes[i].scene === previousScene) {
         previousId = scenes[i].data.id;
         break;
       }
-
     }
 
     if (previousId === null) {
       return initial;
     }
 
-    // Find the arrow in the destination panorama
-    // that points back to the previous panorama.
+    // Find navigation arrow back to previous scene
     var links = destinationScene.data.linkHotspots;
 
     for (var j = 0; j < links.length; j++) {
 
       if (links[j].target === previousId) {
 
-        // Look 180 degrees away from the return arrow.
-        // This maintains the direction of travel.
+        // Face away from the return arrow
         var oppositeYaw = links[j].yaw + Math.PI;
 
-        // Normalize the direction.
         var arrivalYaw = Math.atan2(
           Math.sin(oppositeYaw),
           Math.cos(oppositeYaw)
         );
 
         return {
-
-          // Face the direction of travel.
           yaw: arrivalYaw,
-
-          // Keep original vertical viewing angle.
           pitch: initial.pitch,
-
-          // Keep original zoom.
           fov: initial.fov
-
         };
-
       }
-
     }
 
-    // Fallback if no matching arrow exists.
     return initial;
   }
 
   // =====================================================
-  // SWITCH PANORAMA WITH ANIMATION
+  // SWITCH PANORAMA
+  // DIRECT CROSSFADE - NO CAMERA APPROACH
   // =====================================================
 
   function switchScene(scene, hotspot) {
@@ -425,10 +378,8 @@
       return;
     }
 
-    // Get the current panorama.
     var currentScene = viewer.scene();
 
-    // Ignore navigation to the same panorama.
     if (currentScene === scene.scene) {
       return;
     }
@@ -437,112 +388,32 @@
 
     isTransitioning = true;
 
-    // Store original zoom limiter.
-    var oldView = null;
-    var originalLimiter = null;
-
-    // Calculate the destination viewing angle.
+    // Calculate the arrival direction
     var arrivalView = getArrivalView(
       scene,
       currentScene,
       hotspot
     );
 
-    // ===================================================
-    // FINISH TRANSITION
-    // ===================================================
+    // Open destination at normal zoom
+    scene.view.setParameters(arrivalView);
 
-    function finishTransition() {
-
-      // Restore original zoom restrictions.
-      if (oldView) {
-        oldView.setLimiter(originalLimiter);
-      }
-
-      isTransitioning = false;
-
-      startAutorotate();
-    }
-
-    // ===================================================
-    // CHANGE PANORAMA
-    // ===================================================
-
-    function changePanorama() {
-
-      // Open the next panorama facing the
-      // direction of travel at normal zoom.
-      scene.view.setParameters(arrivalView);
-
-      // Smooth crossfade.
-      scene.scene.switchTo({
-
+    // Switch directly to destination.
+    // No lookTo() camera movement is performed.
+    scene.scene.switchTo(
+      {
         transitionDuration:
           currentScene ? fadeDuration : 0
+      },
+      function() {
+        isTransitioning = false;
+        startAutorotate();
+      }
+    );
 
-      }, finishTransition);
-
-      // Update interface.
-      updateSceneName(scene);
-      updateSceneList(scene);
-    }
-
-    // ===================================================
-    // INITIAL SCENE OR SCENE-LIST NAVIGATION
-    // ===================================================
-
-    if (!hotspot || !currentScene) {
-
-      changePanorama();
-
-      return;
-    }
-
-    // ===================================================
-    // GOOGLE STREET VIEW APPROACH ANIMATION
-    // ===================================================
-
-    oldView = currentScene.view();
-
-    // Save the original zoom restrictions.
-    originalLimiter = oldView.limiter();
-
-    // Temporarily remove the zoom restriction.
-    // This allows the same approach animation
-    // for high- and lower-resolution panoramas.
-    oldView.setLimiter(null);
-
-    // Move the camera toward the selected arrow.
-    currentScene.lookTo({
-
-      // Horizontal position of the arrow.
-      yaw: hotspot.yaw,
-
-      // Aim slightly above the arrow.
-      pitch: hotspot.pitch - 0.30,
-
-      // Create the forward movement impression.
-      fov: oldView.fov() * approachScale
-
-    }, {
-
-      // Duration of approach animation.
-      transitionDuration: approachDuration,
-
-      // Rotate by the shortest path.
-      closest: true,
-
-      // Avoid interruption during animation.
-      controlsInterrupt: false
-
-    }, function() {
-
-      // After moving toward the arrow,
-      // crossfade to the next panorama.
-      changePanorama();
-
-    });
-
+    // Update interface
+    updateSceneName(scene);
+    updateSceneList(scene);
   }
 
   // =====================================================
@@ -550,7 +421,6 @@
   // =====================================================
 
   function updateSceneName(scene) {
-
     sceneNameElement.innerHTML =
       sanitize(scene.data.name);
   }
@@ -561,40 +431,26 @@
 
       var el = sceneElements[i];
 
-      if (
-        el.getAttribute('data-id') === scene.data.id
-      ) {
-
+      if (el.getAttribute('data-id') === scene.data.id) {
         el.classList.add('current');
-
       } else {
-
         el.classList.remove('current');
-
       }
-
     }
-
   }
 
   function showSceneList() {
-
     sceneListElement.classList.add('enabled');
-
     sceneListToggleElement.classList.add('enabled');
   }
 
   function hideSceneList() {
-
     sceneListElement.classList.remove('enabled');
-
     sceneListToggleElement.classList.remove('enabled');
   }
 
   function toggleSceneList() {
-
     sceneListElement.classList.toggle('enabled');
-
     sceneListToggleElement.classList.toggle('enabled');
   }
 
@@ -604,49 +460,31 @@
 
   function startAutorotate() {
 
-    if (
-      !autorotateToggleElement.classList.contains(
-        'enabled'
-      )
-    ) {
+    if (!autorotateToggleElement.classList.contains('enabled')) {
       return;
     }
 
     viewer.startMovement(autorotate);
-
     viewer.setIdleMovement(3000, autorotate);
   }
 
   function stopAutorotate() {
-
     viewer.stopMovement();
-
     viewer.setIdleMovement(Infinity);
   }
 
   function toggleAutorotate() {
 
-    if (
-      autorotateToggleElement.classList.contains(
-        'enabled'
-      )
-    ) {
+    if (autorotateToggleElement.classList.contains('enabled')) {
 
-      autorotateToggleElement.classList.remove(
-        'enabled'
-      );
-
+      autorotateToggleElement.classList.remove('enabled');
       stopAutorotate();
 
     } else {
 
-      autorotateToggleElement.classList.add(
-        'enabled'
-      );
-
+      autorotateToggleElement.classList.add('enabled');
       startAutorotate();
     }
-
   }
 
   // =====================================================
@@ -655,31 +493,24 @@
 
   function createLinkHotspotElement(hotspot) {
 
-    // Create hotspot wrapper.
     var wrapper = document.createElement('div');
 
     wrapper.classList.add('hotspot');
     wrapper.classList.add('link-hotspot');
 
-    // Create navigation icon.
     var icon = document.createElement('img');
 
     icon.src = 'img/link.png';
-
     icon.classList.add('link-hotspot-icon');
 
-    // Rotate navigation arrow.
+    // Preserve arrow rotation
     var transformProperties = [
       '-ms-transform',
       '-webkit-transform',
       'transform'
     ];
 
-    for (
-      var i = 0;
-      i < transformProperties.length;
-      i++
-    ) {
+    for (var i = 0; i < transformProperties.length; i++) {
 
       var property = transformProperties[i];
 
@@ -687,20 +518,18 @@
         'rotate(' + hotspot.rotation + 'rad)';
     }
 
-    // Navigate using our transition animation.
+    // Navigate using direct crossfade
     wrapper.addEventListener('click', function() {
 
       switchScene(
         findSceneById(hotspot.target),
         hotspot
       );
-
     });
 
-    // Prevent unwanted event propagation.
     stopTouchAndScrollEventPropagation(wrapper);
 
-    // Tooltip.
+    // Original tooltip (hidden by your CSS)
     var tooltip = document.createElement('div');
 
     tooltip.classList.add('hotspot-tooltip');
@@ -727,93 +556,67 @@
     wrapper.classList.add('info-hotspot');
 
     var header = document.createElement('div');
-
     header.classList.add('info-hotspot-header');
 
-    // Icon.
+    // Icon
     var iconWrapper = document.createElement('div');
-
-    iconWrapper.classList.add(
-      'info-hotspot-icon-wrapper'
-    );
+    iconWrapper.classList.add('info-hotspot-icon-wrapper');
 
     var icon = document.createElement('img');
-
     icon.src = 'img/info.png';
-
     icon.classList.add('info-hotspot-icon');
 
     iconWrapper.appendChild(icon);
 
-    // Title.
+    // Title
     var titleWrapper = document.createElement('div');
-
-    titleWrapper.classList.add(
-      'info-hotspot-title-wrapper'
-    );
+    titleWrapper.classList.add('info-hotspot-title-wrapper');
 
     var title = document.createElement('div');
-
     title.classList.add('info-hotspot-title');
-
     title.innerHTML = hotspot.title;
 
     titleWrapper.appendChild(title);
 
-    // Close button.
+    // Close button
     var closeWrapper = document.createElement('div');
-
-    closeWrapper.classList.add(
-      'info-hotspot-close-wrapper'
-    );
+    closeWrapper.classList.add('info-hotspot-close-wrapper');
 
     var closeIcon = document.createElement('img');
-
     closeIcon.src = 'img/close.png';
-
-    closeIcon.classList.add(
-      'info-hotspot-close-icon'
-    );
+    closeIcon.classList.add('info-hotspot-close-icon');
 
     closeWrapper.appendChild(closeIcon);
 
-    // Build header.
+    // Build header
     header.appendChild(iconWrapper);
     header.appendChild(titleWrapper);
     header.appendChild(closeWrapper);
 
-    // Text.
+    // Information text
     var text = document.createElement('div');
-
     text.classList.add('info-hotspot-text');
-
     text.innerHTML = hotspot.text;
 
     wrapper.appendChild(header);
     wrapper.appendChild(text);
 
-    // Mobile modal.
+    // Mobile modal
     var modal = document.createElement('div');
-
     modal.innerHTML = wrapper.innerHTML;
-
     modal.classList.add('info-hotspot-modal');
 
     document.body.appendChild(modal);
 
     var toggle = function() {
-
       wrapper.classList.toggle('visible');
-
       modal.classList.toggle('visible');
     };
 
-    // Open information hotspot.
     wrapper.querySelector(
       '.info-hotspot-header'
     ).addEventListener('click', toggle);
 
-    // Close mobile modal.
     modal.querySelector(
       '.info-hotspot-close-wrapper'
     ).addEventListener('click', toggle);
@@ -827,10 +630,7 @@
   // STOP EVENT PROPAGATION
   // =====================================================
 
-  function stopTouchAndScrollEventPropagation(
-    element,
-    eventList
-  ) {
+  function stopTouchAndScrollEventPropagation(element) {
 
     var eventList = [
       'touchstart',
@@ -849,9 +649,7 @@
           event.stopPropagation();
         }
       );
-
     }
-
   }
 
   // =====================================================
@@ -861,11 +659,9 @@
   function findSceneById(id) {
 
     for (var i = 0; i < scenes.length; i++) {
-
       if (scenes[i].data.id === id) {
         return scenes[i];
       }
-
     }
 
     return null;
@@ -874,11 +670,9 @@
   function findSceneDataById(id) {
 
     for (var i = 0; i < data.scenes.length; i++) {
-
       if (data.scenes[i].id === id) {
         return data.scenes[i];
       }
-
     }
 
     return null;
