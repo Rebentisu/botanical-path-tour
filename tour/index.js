@@ -340,7 +340,7 @@
   // Animation settings.
   var approachDuration = 250;
   var fadeDuration = 400;
-  var approachScale = 0.78;
+  var approachScale = 1.00;
 
   // =====================================================
   // CALCULATE ARRIVAL DIRECTION
