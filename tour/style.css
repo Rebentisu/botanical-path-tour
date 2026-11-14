@@ -1170,3 +1170,25 @@ body.mobile #rurbaniveMobileNavigation button:disabled {
 }
 
 
+/* Show panorama navigation arrows on mobile */
+
+body.mobile .link-hotspot {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Keep part_XX hover labels hidden */
+body.mobile .link-hotspot-tooltip {
+  display: none !important;
+}
+
+/* Make navigation arrows slightly smaller on phones */
+@media (max-width: 600px) {
+  body.mobile .link-hotspot {
+    width: 52px !important;
+    height: 52px !important;
+  }
+}
+
+
