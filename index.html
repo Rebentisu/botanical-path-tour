@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#eceade">
+  <meta name="description" content="RURBANIVE RUE#2 — 360° Botanical Path Tour at Aggeria Mine, Milos.">
+  <title>360° Botanical Path Tour | RURBANIVE</title>
+  <style>
+    :root { --forest: #1b4030; --deep: #19382d; --mint: #b3d877; --paper: #fbfaf4; --zoom-time: 2000ms; }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body { font-family: "Segoe UI", Inter, system-ui, Arial, sans-serif; background: #e9e7dc; color: var(--deep); }
+    button { font: inherit; }
+    .viewport { width: 100%; height: 100dvh; min-height: 330px; position: relative; isolation: isolate; overflow: hidden; background: #e9e7dc; }
+    .map-layer { position:absolute; inset:0; transform-origin:50% 50%; will-change:transform; transition: transform var(--zoom-time) cubic-bezier(.18,.69,.22,1); }
+    .map-layer img { display:block; height:100%; width:100%; object-fit:contain; pointer-events:none; user-select:none; -webkit-user-drag:none; }
+    .map-shade { position:absolute; inset:0; pointer-events:none; background: linear-gradient(90deg,rgba(23,49,33,.05),transparent 46%),linear-gradient(180deg,rgba(255,255,255,.05),transparent 58%); }
+
+    /* Both panels remain visible until ENTER TOUR is clicked. */
+    .hud-stack { position:absolute; z-index:3; left:clamp(12px,2.45vw,36px); bottom:clamp(12px,2.45vw,34px); width:min(382px,calc(100% - 24px)); display:flex; flex-direction:column; gap:10px; transition:opacity 280ms ease, transform 280ms ease; }
+    .brand { background:rgba(251,249,242,.96); border:1px solid rgba(255,255,255,.86); box-shadow:0 12px 36px rgba(36,46,27,.12); border-radius:16px; padding:15px 18px 17px; backdrop-filter:blur(8px); }
+    .brand-top { display:flex; justify-content:space-between; align-items:center; gap:14px; border-bottom:1px solid rgba(54,90,63,.18); padding-bottom:8px; }
+    .brand img { display:block; width:119px; max-height:69px; object-fit:contain; object-position:left center; }
+    .brand .tag { font-size:10px; font-weight:800; letter-spacing:.12em; text-align:right; text-transform:uppercase; line-height:1.55; color:#52805a; white-space:nowrap; }
+    .brand h1 { margin:12px 0 8px; font-size:clamp(20px,2vw,25px); line-height:1.14; letter-spacing:-.035em; color:#173d31; font-weight:800; }
+    .brand .project { font-size:12px; color:#395647; font-weight:700; line-height:1.35; }
+    .brand .theme { font-size:11.5px; color:#748471; margin-top:4px; line-height:1.25; }
+    .howto { background:rgba(20,48,37,.94); border:1px solid rgba(177,211,150,.29); color:#f5f9ef; box-shadow:0 12px 32px rgba(19,37,27,.22); border-radius:16px; padding:17px 19px 17px; backdrop-filter:blur(9px); }
+    .howto .kicker { display:flex; align-items:center; gap:9px; color:#b8d986; font-size:10px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; }
+    .howto .kicker::before { content:""; width:7px; height:7px; background:#b8da83; border-radius:50%; box-shadow:0 0 0 4px rgba(184,218,131,.14); }
+    .howto h2 { margin:7px 0 12px; font-size:19px; letter-spacing:.11em; line-height:1.2; }
+    .howto ol { list-style:none; margin:0; padding:0; }
+    .howto li { display:grid; grid-template-columns:27px 1fr; gap:9px; padding:5.5px 0; font-size:12.25px; line-height:1.34; }
+    .howto .num { color:#badb89; font-weight:800; font-family:Consolas,"Courier New",monospace; }
+
+    /* Entrance button is the only marker below the hikers. */
+    .enter-button { position:absolute; z-index:4; min-width:170px; min-height:52px; padding:14px 22px; border:1px solid rgba(255,255,255,.85); border-radius:12px; cursor:pointer; background:#1b5038; color:#fff; font-weight:850; font-size:12.5px; letter-spacing:.12em; white-space:nowrap; text-align:center; box-shadow:0 10px 30px rgba(20,59,37,.30); animation:softPulse 3s ease-in-out infinite; transition:background .2s,opacity .26s,box-shadow .2s; }
+    .enter-button:hover { background:#296b48; }
+    .enter-button:focus-visible,.end-card button:focus-visible { outline:3px solid #9acb53; outline-offset:4px; }
+    @keyframes softPulse { 0%,100% {box-shadow:0 8px 27px rgba(20,59,37,.29),0 0 0 0 rgba(137,195,88,0)} 50% {box-shadow:0 10px 29px rgba(20,59,37,.33),0 0 0 6px rgba(137,195,88,.14)} }
+
+    /* Zoom for a full 2 seconds; fade begins gently near the end. */
+    .veil { pointer-events:none; position:absolute; inset:0; z-index:5; opacity:0; background:linear-gradient(130deg,rgba(18,45,32,.89),rgba(23,51,36,.73)); transition:opacity 550ms ease; }
+    .end-card { position:absolute; z-index:6; top:50%; left:50%; width:min(415px,calc(100vw - 30px)); padding:27px; text-align:center; transform:translate(-50%,-45%); background:#fafaf4; box-shadow:0 25px 75px rgba(3,25,12,.3); border-radius:17px; border:1px solid rgba(255,255,255,.77); opacity:0; visibility:hidden; transition:opacity 340ms ease,transform 340ms ease,visibility 340ms; }
+    .end-card .kicker { color:#63894e; font-size:10px; font-weight:850; text-transform:uppercase; letter-spacing:.16em; }
+    .end-card h2 { font-size:25px; margin:10px 0; color:#1b4030; }
+    .end-card p { font-size:13.5px; line-height:1.6; color:#4e6553; margin:0 0 19px; }
+    .end-card .actions { display:flex; justify-content:center; gap:9px; flex-wrap:wrap; }
+    .end-card button { cursor:pointer; border:1px solid #79967a; border-radius:8px; padding:11px 14px; color:#214d35; background:transparent; font-weight:700; font-size:13px; }
+    .end-card button.primary { background:#20543b; border-color:#20543b; color:white; }
+    .viewport.zooming .hud-stack { opacity:0; transform:translateY(-7px); pointer-events:none; }
+    .viewport.zooming .enter-button { opacity:0; animation:none; pointer-events:none; }
+    .viewport.zooming .veil { opacity:1; transition-delay:1450ms; }
+    .viewport.complete .end-card { opacity:1; visibility:visible; transform:translate(-50%,-50%); }
+
+    @media (max-width:700px) {
+      /* Stacking at top keeps the center of the map and hikers unobstructed. */
+      .hud-stack { top:12px; bottom:auto; left:12px; width:calc(100% - 24px); gap:8px; }
+      .brand { padding:10px 13px 11px; border-radius:13px; }
+      .brand-top { padding-bottom:4px; }
+      .brand img { width:103px; max-height:55px; }
+      .brand .tag { font-size:9px; }
+      .brand h1 { font-size:21px; margin:7px 0 5px; }
+      .brand .project { font-size:11px; }
+      .brand .theme { font-size:10.5px; margin-top:2px; }
+      .howto { padding:11px 13px 12px; border-radius:13px; }
+      .howto .kicker { font-size:9px; }
+      .howto h2 { font-size:16px; margin:5px 0 7px; }
+      .howto li { grid-template-columns:23px 1fr; font-size:10.7px; line-height:1.28; padding:3px 0; gap:7px; }
+      .enter-button { min-width:150px; min-height:44px; padding:10px 15px; font-size:11.5px; }
+    }
+    @media (max-width:700px) and (max-height:680px) {
+      .brand { padding:7px 11px 8px; }
+      .brand img { width:78px; max-height:41px; }
+      .brand h1 { font-size:17px; margin:5px 0 4px; }
+      .brand .project { font-size:10px; }
+      .brand .theme { font-size:9.5px; }
+      .howto { padding:8px 11px; }
+      .howto h2 { font-size:14px; margin:3px 0 4px; }
+      .howto li { font-size:9.8px; padding:2px 0; }
+    }
+    @media (max-width:350px) {
+      .brand h1 { font-size:19px; }
+      .howto li { font-size:10.2px; }
+      .enter-button { min-width:144px; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .map-layer { transition-duration: 60ms; }
+      .enter-button { animation:none; }
+      .viewport.zooming .veil { transition-delay:0ms; transition-duration:60ms; }
+    }
+  </style>
+</head>
+<body>
+  <main class="viewport" id="viewport">
+    <div class="map-layer" id="mapLayer">
+      <img id="mapImage" src="map.png" alt="Illustrated aerial map of the Botanical Path at Aggeria Mine on Milos, showing two hikers near the entrance" draggable="false">
+    </div>
+    <div class="map-shade" aria-hidden="true"></div>
+
+    <div class="hud-stack" id="hudStack">
+      <header class="brand" aria-label="Tour project details">
+        <div class="brand-top">
+          <img src="rurbanive-logo.png" alt="RURBANIVE — Rural Urban Immersiveness">
+          <div class="tag">RUE#2<br>Milos, Greece</div>
+        </div>
+        <h1>360° Botanical Path Tour</h1>
+        <div class="project">Milos Ecosystem and Biodiversity Restoration</div>
+        <div class="theme">Ecosystem and biodiversity restoration</div>
+      </header>
+      <section class="howto" aria-label="How to use the virtual tour">
+        <div class="kicker">Quick start guide</div>
+        <h2>HOW TO USE</h2>
+        <ol>
+          <li><span class="num">01</span><span>Select the entrance to begin your journey</span></li>
+          <li><span class="num">02</span><span>Follow the path by clicking the navigation arrows</span></li>
+          <li><span class="num">03</span><span>Look around freely in 360°</span></li>
+          <li><span class="num">04</span><span>Zoom in or out to explore details</span></li>
+          <li><span class="num">05</span><span>Use the menu to revisit any point of the trail</span></li>
+        </ol>
+      </section>
+    </div>
+
+    <button class="enter-button" id="enterButton" type="button" aria-label="Enter the Botanical Path 360 degree tour">ENTER TOUR</button>
+
+    <div class="veil" aria-hidden="true"></div>
+    <section class="end-card" id="endCard" aria-live="polite" aria-hidden="true">
+      <div class="kicker">RURBANIVE · RUE#2</div>
+      <h2>Ready to explore</h2>
+      <p>The map zoom is complete. <strong>Part 1</strong> of the 360° Botanical Path Tour will open here when we connect this introduction to Marzipano.</p>
+      <div class="actions">
+        <button type="button" id="backButton">Back to map</button>
+        <button type="button" class="primary" id="replayButton">Replay zoom</button>
+      </div>
+    </section>
+  </main>
+  <script>
+    (function() {
+      'use strict';
+      var viewport = document.getElementById('viewport');
+      var mapLayer = document.getElementById('mapLayer');
+      var mapImage = document.getElementById('mapImage');
+      var enterButton = document.getElementById('enterButton');
+      var endCard = document.getElementById('endCard');
+      var backButton = document.getElementById('backButton');
+      var replayButton = document.getElementById('replayButton');
+
+      // Hikers are near x=.745 on the map. The ENTER TOUR button sits directly BELOW them.
+      // Values are fractions of the original map, not the browser viewport.
+      var ENTRY_X = 0.746;
+      var ENTRY_Y = 0.826;
+      var ZOOM = 4.0;
+      var DURATION = 2000;
+      var reducedMotion = window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var completeTimer = null;
+      var zoomed = false;
+
+      document.documentElement.style.setProperty('--zoom-time', DURATION + 'ms');
+
+      function entrancePoint() {
+        var w = viewport.clientWidth;
+        var h = viewport.clientHeight;
+        var iw = mapImage.naturalWidth || 2048;
+        var ih = mapImage.naturalHeight || 1224;
+        var scale = Math.min(w / iw, h / ih); // object-fit: contain
+        var imageW = iw * scale;
+        var imageH = ih * scale;
+        return {
+          x: (w - imageW) / 2 + imageW * ENTRY_X,
+          y: (h - imageH) / 2 + imageH * ENTRY_Y,
+          w: w,
+          h: h
+        };
+      }
+
+      function updateLayout() {
+        var point = entrancePoint();
+        // Button is BELOW and centered on hikers.
+        // Clamp at screen edges while preserving a clear gap.
+        var btnW = enterButton.offsetWidth || 170;
+        var btnH = enterButton.offsetHeight || 52;
+        var left = Math.max(12, Math.min(point.x - btnW / 2, point.w - btnW - 12));
+        var top = Math.max(12, Math.min(point.y - 15, point.h - btnH - 12));
+        enterButton.style.left = left + 'px';
+        enterButton.style.top = top + 'px';
+
+        if (zoomed) {
+          // With transform-origin: center, this moves entrance to screen center.
+          var dx = ZOOM * (point.w / 2 - point.x);
+          var dy = ZOOM * (point.h / 2 - point.y);
+          mapLayer.style.transform =
+            'translate3d(' + dx + 'px,' + dy + 'px,0) scale(' + ZOOM + ')';
+        }
+      }
+
+      function begin() {
+        if (viewport.classList.contains('zooming')) return;
+        clearTimeout(completeTimer);
+        viewport.classList.remove('complete');
+        endCard.setAttribute('aria-hidden', 'true');
+        zoomed = true;
+        viewport.classList.add('zooming');
+        updateLayout();
+      completeTimer = setTimeout(function() {
+  window.location.href = 'tour/index.html';
+}, reducedMotion ? 120 : DURATION + 70);
+      }
+
+      function reset() {
+        clearTimeout(completeTimer);
+        mapLayer.style.transition = 'none';
+        zoomed = false;
+        mapLayer.style.transform = 'none';
+        viewport.classList.remove('zooming', 'complete');
+        endCard.setAttribute('aria-hidden', 'true');
+        updateLayout();
+        void mapLayer.offsetWidth; // flush before re-enabling transitions
+        mapLayer.style.transition = '';
+        enterButton.focus({preventScroll:true});
+      }
+
+      enterButton.addEventListener('click', begin);
+      backButton.addEventListener('click', reset);
+      replayButton.addEventListener('click', function() {
+        reset();
+        requestAnimationFrame(function() { requestAnimationFrame(begin); });
+      });
+      window.addEventListener('resize', updateLayout);
+      if (!mapImage.complete) mapImage.addEventListener('load', updateLayout);
+      updateLayout();
+    })();
+  </script>
+</body>
+</html>

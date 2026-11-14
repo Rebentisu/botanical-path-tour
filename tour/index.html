@@ -1,0 +1,370 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>360° Botanical Path Tour | RURBANIVE</title>
+<meta charset="utf-8">
+<meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
+<style> @-ms-viewport { width: device-width; } </style>
+
+<link rel="stylesheet" href="vendor/reset.min.css">
+<link rel="stylesheet" href="style.css">
+
+<style>
+  /* BACK TO MAP BUTTON */
+  #backToMap {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    z-index: 1000;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #1b5038;
+    color: #fff;
+    padding: 13px 20px;
+    border-radius: 11px;
+
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-decoration: none;
+
+    box-shadow: 0 5px 18px rgba(0,0,0,0.3);
+    transition: background 0.2s ease;
+  }
+
+  #backToMap:hover {
+    background: #296b48;
+  }
+
+  #backToMap:focus-visible {
+    outline: 3px solid #a6cf58;
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 600px) {
+    #backToMap {
+      bottom: 12px;
+      left: 12px;
+      padding: 11px 14px;
+      font-size: 11px;
+    }
+  }
+</style>
+</head>
+
+<body class="multiple-scenes view-control-buttons">
+
+<div id="pano"></div>
+
+<!-- RETURN TO RURBANIVE MAP -->
+<a href="../index.html" id="backToMap"
+   aria-label="Back to the Botanical Path map">
+  ← BACK TO MAP
+</a>
+
+<!-- SCENE LIST -->
+<div id="sceneList">
+  <ul class="scenes">
+
+    <a href="javascript:void(0)" class="scene" data-id="0-part_1">
+      <li class="text">part_1</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="1-part_2">
+      <li class="text">part_2</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="2-part_3">
+      <li class="text">part_3</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="3-part_4">
+      <li class="text">part_4</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="4-part_5">
+      <li class="text">part_5</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="5-part_6">
+      <li class="text">part_6</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="6-part_7">
+      <li class="text">part_7</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="7-part_8">
+      <li class="text">part_8</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="8-part_9">
+      <li class="text">part_9</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="9-part_10">
+      <li class="text">part_10</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="10-part_11">
+      <li class="text">part_11</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="11-part_12">
+      <li class="text">part_12</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="12-part_13">
+      <li class="text">part_13</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="13-part_14">
+      <li class="text">part_14</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="14-part_15">
+      <li class="text">part_15</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="15-part_16">
+      <li class="text">part_16</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="16-part_17">
+      <li class="text">part_17</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="17-part_18">
+      <li class="text">part_18</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="18-part_19">
+      <li class="text">part_19</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="19-part_20">
+      <li class="text">part_20</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="20-part_21">
+      <li class="text">part_21</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="21-part_22">
+      <li class="text">part_22</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="22-part_23">
+      <li class="text">part_23</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="23-part_24">
+      <li class="text">part_24</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="24-part_25">
+      <li class="text">part_25</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="25-part_26">
+      <li class="text">part_26</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="26-part_27">
+      <li class="text">part_27</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="27-part_28">
+      <li class="text">part_28</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="28-part_29">
+      <li class="text">part_29</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="29-part_30">
+      <li class="text">part_30</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="30-part_31">
+      <li class="text">part_31</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="31-part_32">
+      <li class="text">part_32</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="32-part_33">
+      <li class="text">part_33</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="33-part_34">
+      <li class="text">part_34</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="34-part_35">
+      <li class="text">part_35</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="35-part_36">
+      <li class="text">part_36</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="36-part_37">
+      <li class="text">part_37</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="37-part_38">
+      <li class="text">part_38</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="38-part_39">
+      <li class="text">part_39</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="39-part_40">
+      <li class="text">part_40</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="40-part_41">
+      <li class="text">part_41</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="41-part_42">
+      <li class="text">part_42</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="42-part_43">
+      <li class="text">part_43</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="43-part_44">
+      <li class="text">part_44</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="44-part_45">
+      <li class="text">part_45</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="45-part_46">
+      <li class="text">part_46</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="46-part_47">
+      <li class="text">part_47</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="47-part_48">
+      <li class="text">part_48</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="48-part_49">
+      <li class="text">part_49</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="49-part_50">
+      <li class="text">part_50</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="50-part_51">
+      <li class="text">part_51</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="51-part_52">
+      <li class="text">part_52</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="52-part_53">
+      <li class="text">part_53</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="53-part_54">
+      <li class="text">part_54</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="54-part_55">
+      <li class="text">part_55</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="55-part_56">
+      <li class="text">part_56</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="56-part_57">
+      <li class="text">part_57</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="57-part_58">
+      <li class="text">part_58</li>
+    </a>
+
+    <a href="javascript:void(0)" class="scene" data-id="58-part_59">
+      <li class="text">part_59</li>
+    </a>
+
+  </ul>
+</div>
+
+<!-- SCENE TITLE -->
+<div id="titleBar">
+  <h1 class="sceneName"></h1>
+</div>
+
+<!-- AUTOROTATE -->
+<a href="javascript:void(0)" id="autorotateToggle">
+  <img class="icon off" src="img/play.png">
+  <img class="icon on" src="img/pause.png">
+</a>
+
+<!-- FULLSCREEN -->
+<a href="javascript:void(0)" id="fullscreenToggle">
+  <img class="icon off" src="img/fullscreen.png">
+  <img class="icon on" src="img/windowed.png">
+</a>
+
+<!-- SCENE LIST TOGGLE -->
+<a href="javascript:void(0)" id="sceneListToggle">
+  <img class="icon off" src="img/expand.png">
+  <img class="icon on" src="img/collapse.png">
+</a>
+
+<!-- VIEW CONTROLS -->
+<a href="javascript:void(0)" id="viewUp" class="viewControlButton viewControlButton-1">
+  <img class="icon" src="img/up.png">
+</a>
+
+<a href="javascript:void(0)" id="viewDown" class="viewControlButton viewControlButton-2">
+  <img class="icon" src="img/down.png">
+</a>
+
+<a href="javascript:void(0)" id="viewLeft" class="viewControlButton viewControlButton-3">
+  <img class="icon" src="img/left.png">
+</a>
+
+<a href="javascript:void(0)" id="viewRight" class="viewControlButton viewControlButton-4">
+  <img class="icon" src="img/right.png">
+</a>
+
+<a href="javascript:void(0)" id="viewIn" class="viewControlButton viewControlButton-5">
+  <img class="icon" src="img/plus.png">
+</a>
+
+<a href="javascript:void(0)" id="viewOut" class="viewControlButton viewControlButton-6">
+  <img class="icon" src="img/minus.png">
+</a>
+
+<!-- MARZIPANO LIBRARIES -->
+<script src="vendor/screenfull.min.js"></script>
+<script src="vendor/bowser.min.js"></script>
+<script src="vendor/marzipano.js"></script>
+
+<!-- TOUR DATA AND ANIMATIONS -->
+<script src="data.js"></script>
+<script src="index.js"></script>
+
+</body>
+</html>
