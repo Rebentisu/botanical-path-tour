@@ -403,9 +403,7 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
               opacity 0.3s;
 }
 
-.mobile .link-hotspot {
-  top: 19px; /* ( 70 - (16 + 2*8) ) / 2 */
-}
+/* Mobile tooltip offset is not needed: hotspot labels are hidden. */
 
 .no-touch .link-hotspot:hover .link-hotspot-tooltip {
   opacity: 1;
@@ -997,28 +995,39 @@ body.view-control-buttons .viewControlButton {
 }
 
 /* ========================================================
-   RURBANIVE - MOBILE-ONLY TOUR LAYOUT
-   Append this block to the END of your existing tour/style.css.
-   Desktop styling and panorama transitions are untouched.
+   RURBANIVE - MOBILE TOUR (CORRECTED)
+
+   Only the CSS layout changes on mobile; the desktop is unchanged.
+   CRITICAL: Marzipano itself sets link hotspot display: block/none
+   to hide points that are behind the camera. Never force a hotspot's
+   display, position or visibility with !important.
    ======================================================== */
 
-/* The navigation is created by the revised index.js.
-   Hide it completely in desktop layout. */
+/* Legacy fixed previous/next controls from the earlier mobile JS.
+   Those are intentionally unused; trail hotspots remain the navigation. */
 #rurbaniveMobileNavigation {
-  display: none;
-}
-
-/* Marzipano applies body.mobile at phone viewport sizes. */
-body.mobile #titleBar,
-body.mobile #sceneList,
-body.mobile #sceneListToggle,
-body.mobile .link-hotspot,
-body.mobile .link-hotspot-tooltip,
-body.mobile .viewControlButton {
   display: none !important;
 }
 
-/* Logo at top left. The logo image already exists in your HTML. */
+/* Original Marzipano menus and technical names are not shown. */
+body.mobile #titleBar,
+body.mobile #sceneList,
+body.mobile #sceneListToggle,
+body.mobile .link-hotspot-tooltip {
+  display: none !important;
+}
+
+/* A navigation arrow stays anchored to its panorama coordinates.
+   Do not set display, visibility or position here; Marzipano owns them. */
+body.mobile .link-hotspot {
+  width: 50px;
+  height: 50px;
+  margin-left: -25px;
+  margin-top: -25px;
+  top: 0;
+}
+
+/* RURBANIVE logo: mobile upper-left. */
 body.mobile #rurbaniveTourLogo {
   position: fixed !important;
   top: calc(14px + env(safe-area-inset-top, 0px)) !important;
@@ -1035,7 +1044,7 @@ body.mobile #rurbaniveTourLogo {
   pointer-events: none;
 }
 
-/* Compact BACK TO MAP beneath the logo, not full width. */
+/* BACK TO MAP just below the logo. */
 body.mobile #backToMap {
   position: fixed !important;
   top: calc(105px + env(safe-area-inset-top, 0px)) !important;
@@ -1054,7 +1063,7 @@ body.mobile #backToMap {
   z-index: 1100 !important;
 }
 
-/* Compact autorotate / fullscreen in the upper-right corner. */
+/* Autorotate and fullscreen: upper-right. */
 body.mobile #autorotateToggle,
 body.mobile #fullscreenToggle {
   position: fixed !important;
@@ -1065,19 +1074,15 @@ body.mobile #fullscreenToggle {
   border-radius: 10px !important;
   z-index: 1100 !important;
 }
-
 body.mobile #fullscreenToggle {
   right: 14px !important;
 }
-
 body.mobile #autorotateToggle {
   right: 14px !important;
 }
-
 body.mobile.fullscreen-enabled #autorotateToggle {
   right: 65px !important;
 }
-
 body.mobile #autorotateToggle .icon,
 body.mobile #fullscreenToggle .icon {
   position: absolute !important;
@@ -1088,63 +1093,16 @@ body.mobile #fullscreenToggle .icon {
   height: 28px !important;
 }
 
-/* Fixed previous and next buttons near the bottom. */
-body.mobile #rurbaniveMobileNavigation {
-  position: fixed;
-  left: 50%;
-  bottom: calc(25px + env(safe-area-inset-bottom, 0px));
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  z-index: 1200;
+/* Restore six manual pan/zoom buttons at bottom-center on phones. */
+body.mobile.view-control-buttons .viewControlButton {
+  display: block !important;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+  width: 40px !important;
+  height: 40px !important;
+  z-index: 1100 !important;
 }
 
-body.mobile #rurbaniveMobileNavigation button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 62px;
-  height: 58px;
-  padding: 0;
-  border: 1px solid rgba(255,255,255,.65);
-  border-radius: 14px;
-  background: #1b5038;
-  color: white;
-  box-shadow: 0 5px 18px rgba(0,0,0,.30);
-  cursor: pointer;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-body.mobile #rurbaniveMobileNavigation svg {
-  display: block;
-  width: 32px;
-  height: 32px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-body.mobile #rurbaniveMobileNavigation button:active {
-  background: #296b48;
-}
-
-body.mobile #rurbaniveMobileNavigation button:focus-visible,
-body.mobile #backToMap:focus-visible {
-  outline: 3px solid #a6cf58;
-  outline-offset: 3px;
-}
-
-body.mobile #rurbaniveMobileNavigation button:disabled {
-  opacity: .42;
-  cursor: default;
-}
-
-/* Short landscape phone screens: make controls more compact. */
+/* Tight screens (landscape phones). */
 @media (max-height: 480px) {
   body.mobile #rurbaniveTourLogo {
     top: 7px !important;
@@ -1156,72 +1114,8 @@ body.mobile #rurbaniveMobileNavigation button:disabled {
     font-size: 10px !important;
     padding: 9px 10px !important;
   }
-  body.mobile #rurbaniveMobileNavigation {
-    bottom: 10px;
-  }
-  body.mobile #rurbaniveMobileNavigation button {
-    width: 52px;
-    height: 46px;
-  }
   body.mobile #autorotateToggle,
   body.mobile #fullscreenToggle {
     top: 8px !important;
   }
 }
-
-
-/* Show panorama navigation arrows on mobile */
-
-body.mobile .link-hotspot {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-/* Keep part_XX hover labels hidden */
-body.mobile .link-hotspot-tooltip {
-  display: none !important;
-}
-
-/* Make navigation arrows slightly smaller on phones */
-@media (max-width: 600px) {
-  body.mobile .link-hotspot {
-    width: 52px !important;
-    height: 52px !important;
-  }
-}
-
-
-
-/* RURBANIVE - FINAL MOBILE NAVIGATION */
-
-/* Hide fixed Previous / Next buttons */
-body.mobile #rurbaniveMobileNavigation {
-  display: none !important;
-}
-
-/* Restore navigation arrows inside the trail */
-body.mobile .link-hotspot {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  width: 50px !important;
-  height: 50px !important;
-  margin-left: -25px !important;
-  margin-top: -25px !important;
-}
-
-/* Keep part_XX tooltips hidden */
-body.mobile .link-hotspot-tooltip {
-  display: none !important;
-}
-
-/* Restore manual view and zoom controls */
-body.mobile.view-control-buttons .viewControlButton {
-  display: block !important;
-  bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
-  width: 40px !important;
-  height: 40px !important;
-  z-index: 1100 !important;
-}
-
