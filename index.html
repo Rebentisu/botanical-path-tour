@@ -188,7 +188,7 @@
         if (zoomed) {
           // With transform-origin: center, this moves entrance to screen center.
           var dx = ZOOM * (point.w / 2 - point.x);
-          var dy = ZOOM * (point.h / 2 - point.y);
+          var dy = ZOOM * (point.h / 2 - point.y) + 150;
           mapLayer.style.transform =
             'translate3d(' + dx + 'px,' + dy + 'px,0) scale(' + ZOOM + ')';
         }
