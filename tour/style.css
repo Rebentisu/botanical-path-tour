@@ -1192,3 +1192,36 @@ body.mobile .link-hotspot-tooltip {
 }
 
 
+
+/* RURBANIVE - FINAL MOBILE NAVIGATION */
+
+/* Hide fixed Previous / Next buttons */
+body.mobile #rurbaniveMobileNavigation {
+  display: none !important;
+}
+
+/* Restore navigation arrows inside the trail */
+body.mobile .link-hotspot {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 50px !important;
+  height: 50px !important;
+  margin-left: -25px !important;
+  margin-top: -25px !important;
+}
+
+/* Keep part_XX tooltips hidden */
+body.mobile .link-hotspot-tooltip {
+  display: none !important;
+}
+
+/* Restore manual view and zoom controls */
+body.mobile.view-control-buttons .viewControlButton {
+  display: block !important;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+  width: 40px !important;
+  height: 40px !important;
+  z-index: 1100 !important;
+}
+
