@@ -971,3 +971,29 @@ body.view-control-buttons .viewControlButton {
 }
 
 
+/* ==========================================
+   RURBANIVE LOGO - BOTTOM LEFT
+   ========================================== */
+
+#rurbaniveTourLogo {
+  position: fixed;
+  bottom: 22px;
+  left: 22px;
+
+  width: 120px;
+  height: auto;
+
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* Mobile screens */
+@media (max-width: 600px) {
+  #rurbaniveTourLogo {
+    bottom: 12px;
+    left: 12px;
+    width: 90px;
+  }
+}
+
+
