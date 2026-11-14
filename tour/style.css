@@ -996,4 +996,177 @@ body.view-control-buttons .viewControlButton {
   }
 }
 
+/* ========================================================
+   RURBANIVE - MOBILE-ONLY TOUR LAYOUT
+   Append this block to the END of your existing tour/style.css.
+   Desktop styling and panorama transitions are untouched.
+   ======================================================== */
+
+/* The navigation is created by the revised index.js.
+   Hide it completely in desktop layout. */
+#rurbaniveMobileNavigation {
+  display: none;
+}
+
+/* Marzipano applies body.mobile at phone viewport sizes. */
+body.mobile #titleBar,
+body.mobile #sceneList,
+body.mobile #sceneListToggle,
+body.mobile .link-hotspot,
+body.mobile .link-hotspot-tooltip,
+body.mobile .viewControlButton {
+  display: none !important;
+}
+
+/* Logo at top left. The logo image already exists in your HTML. */
+body.mobile #rurbaniveTourLogo {
+  position: fixed !important;
+  top: calc(14px + env(safe-area-inset-top, 0px)) !important;
+  bottom: auto !important;
+  left: 14px !important;
+  right: auto !important;
+  width: 132px !important;
+  height: auto !important;
+  padding: 7px 9px;
+  background: rgba(255,255,255,.94);
+  border-radius: 10px;
+  box-shadow: 0 3px 15px rgba(0,0,0,.22);
+  z-index: 1100 !important;
+  pointer-events: none;
+}
+
+/* Compact BACK TO MAP beneath the logo, not full width. */
+body.mobile #backToMap {
+  position: fixed !important;
+  top: calc(105px + env(safe-area-inset-top, 0px)) !important;
+  bottom: auto !important;
+  left: 14px !important;
+  right: auto !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: calc(100vw - 28px);
+  padding: 11px 13px !important;
+  white-space: nowrap;
+  border-radius: 10px;
+  font-size: 11px !important;
+  line-height: 1.2;
+  letter-spacing: .45px !important;
+  z-index: 1100 !important;
+}
+
+/* Compact autorotate / fullscreen in the upper-right corner. */
+body.mobile #autorotateToggle,
+body.mobile #fullscreenToggle {
+  position: fixed !important;
+  top: calc(14px + env(safe-area-inset-top, 0px)) !important;
+  width: 44px !important;
+  height: 44px !important;
+  padding: 0 !important;
+  border-radius: 10px !important;
+  z-index: 1100 !important;
+}
+
+body.mobile #fullscreenToggle {
+  right: 14px !important;
+}
+
+body.mobile #autorotateToggle {
+  right: 14px !important;
+}
+
+body.mobile.fullscreen-enabled #autorotateToggle {
+  right: 65px !important;
+}
+
+body.mobile #autorotateToggle .icon,
+body.mobile #fullscreenToggle .icon {
+  position: absolute !important;
+  top: 7px !important;
+  right: 7px !important;
+  left: auto !important;
+  width: 28px !important;
+  height: 28px !important;
+}
+
+/* Fixed previous and next buttons near the bottom. */
+body.mobile #rurbaniveMobileNavigation {
+  position: fixed;
+  left: 50%;
+  bottom: calc(25px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  z-index: 1200;
+}
+
+body.mobile #rurbaniveMobileNavigation button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 62px;
+  height: 58px;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.65);
+  border-radius: 14px;
+  background: #1b5038;
+  color: white;
+  box-shadow: 0 5px 18px rgba(0,0,0,.30);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.mobile #rurbaniveMobileNavigation svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+body.mobile #rurbaniveMobileNavigation button:active {
+  background: #296b48;
+}
+
+body.mobile #rurbaniveMobileNavigation button:focus-visible,
+body.mobile #backToMap:focus-visible {
+  outline: 3px solid #a6cf58;
+  outline-offset: 3px;
+}
+
+body.mobile #rurbaniveMobileNavigation button:disabled {
+  opacity: .42;
+  cursor: default;
+}
+
+/* Short landscape phone screens: make controls more compact. */
+@media (max-height: 480px) {
+  body.mobile #rurbaniveTourLogo {
+    top: 7px !important;
+    width: 96px !important;
+    padding: 4px 6px;
+  }
+  body.mobile #backToMap {
+    top: 71px !important;
+    font-size: 10px !important;
+    padding: 9px 10px !important;
+  }
+  body.mobile #rurbaniveMobileNavigation {
+    bottom: 10px;
+  }
+  body.mobile #rurbaniveMobileNavigation button {
+    width: 52px;
+    height: 46px;
+  }
+  body.mobile #autorotateToggle,
+  body.mobile #fullscreenToggle {
+    top: 8px !important;
+  }
+}
+
 
