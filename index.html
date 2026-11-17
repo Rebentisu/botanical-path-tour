@@ -6,6 +6,19 @@
   <meta name="theme-color" content="#eceade">
   <meta name="description" content="RURBANIVE RUE#2 — 360° Botanical Path Tour at Aggeria Mine, Milos.">
   <title>360° Botanical Path Tour | RURBANIVE</title>
+  <!-- Redirect standalone visits to the RURBANIVE Community Store; keep iframe embedding intact. -->
+  <script>
+    (function () {
+      const communityStore = "https://community-store.rurbanive-project.eu/";
+      const destination = communityStore +
+        "rural-urban-enablers-overview-page/ecosystem-and-biodiversity-restoration/";
+
+      if (window.top === window.self &&
+          !document.referrer.startsWith(communityStore)) {
+        window.location.replace(destination);
+      }
+    })();
+  </script>
   <style>
     :root { --forest: #1b4030; --deep: #19382d; --mint: #b3d877; --paper: #fbfaf4; --zoom-time: 2000ms; }
     * { box-sizing: border-box; }
